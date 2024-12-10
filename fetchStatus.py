@@ -103,6 +103,7 @@ class TelegramNotifier():
 		last_message_offset = self.data.get('update_id', 0)
 		print("Last Message Offset: ", last_message_offset)
 		all_messages = requests.get(f'https://api.telegram.org/bot{self.bot_token}/getUpdates?offset={last_message_offset}').json()
+		print("Currently Queued Messages: ", all_messages)
 		for message in all_messages['result']:
 			if message['message']['from']['id'] != int(self.chat_id):
 				continue
@@ -154,10 +155,6 @@ class Automator:
 		self.__checkProductsAndNotify()
 
 	def __checkProductsAndNotify(self):
-		if not self.auth_manager.isLoggedIn():
-			print("No Working Cookies Found, Quitting ...")
-			return
-
 		time.sleep(MID_WAIT_TIMEOUT_SECONDS)
 		print("Fetching Product List")
 		self.__getProductList()
